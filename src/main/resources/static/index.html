@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My HLS Streaming Server</title>
+    <!-- Import the HLS.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body { background-color: #121212; color: white; font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        video { width: 70%; max-width: 800px; border: 2px solid #333; border-radius: 8px; box-shadow: 0px 4px 15px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body>
+
+<h1>Spring Boot HLS Stream</h1>
+
+<!-- The Video Player -->
+<video id="videoPlayer" controls></video>
+
+<script>
+    var video = document.getElementById('videoPlayer');
+
+    // The URL to your generated playlist
+    var videoSrc = 'http://localhost:8086/ep1/playlist.m3u8';
+
+    // Check if the browser supports HLS.js
+    if (Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource(videoSrc);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            console.log("Video ready to play!");
+        });
+    }
+    // Safari supports HLS natively, so we just give it the source directly
+    else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = videoSrc;
+    }
+</script>
+</body>
+</html>
