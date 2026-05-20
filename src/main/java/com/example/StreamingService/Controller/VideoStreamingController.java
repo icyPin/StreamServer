@@ -1,5 +1,7 @@
 package com.example.StreamingService.Controller;
 
+import com.example.StreamingService.Model.Show;
+import com.example.StreamingService.Service.FolderReadingService;
 import com.example.StreamingService.Service.VideoService;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -13,21 +15,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/video")
 public class VideoStreamingController {
 
     private final VideoService videoService;
+
     public VideoStreamingController(VideoService videoService){
         this.videoService=videoService;
     }
 
     @GetMapping(value = "/stream" , produces = "video/mp4")
-    public ResponseEntity<ResourceRegion> Stream(@RequestHeader HttpHeaders headers){
+    public ResponseEntity<ResourceRegion> Stream(@RequestHeader HttpHeaders headers ,
+                                                 @RequestParam String filePath){
 
         try{
-            ResourceRegion region = videoService.getPartialVideoRegion(headers);
+            ResourceRegion region = videoService.getPartialVideoRegion(headers , filePath);
             return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
                     .contentType(MediaType.parseMediaType("video/mp4"))
                     .body(region);

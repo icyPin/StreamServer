@@ -22,11 +22,11 @@ import java.nio.file.StandardCopyOption;
 @Service
 public class VideoService {
 
-    public static final String video_path = "/home/icy/Downloads/ep1.mp4";
+
     private final Path storageLocation = Paths.get("videos");
 
-    public ResourceRegion getPartialVideoRegion(HttpHeaders headers) throws IOException {
-        Resource video = new FileSystemResource(video_path);
+    public ResourceRegion getPartialVideoRegion(HttpHeaders headers , String filePath) throws IOException {
+        Resource video = new FileSystemResource(filePath);
         long contentLength = video.contentLength();
 
         HttpRange range = headers.getRange().isEmpty()? null :headers.getRange().getFirst();
