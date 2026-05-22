@@ -1,34 +1,37 @@
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# ==========================================
+# ROOT LEVEL IGNORES (Monorepo Master)
+# ==========================================
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# 1. Custom Media Folders (CRITICAL to prevent Git crashes)
+videos/
+/Downloads/
+*.mp4
+*.mkv
+*.ts
 
-### IntelliJ IDEA ###
-.idea
+# 2. IntelliJ IDEA / WebStorm / PyCharm
+.idea/
 *.iws
 *.iml
 *.ipr
+out/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
+# 3. VS Code
 .vscode/
-videos/
+
+# 4. Operating System Junk
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ==========================================
+# PREP FOR MONTH 2: GESTURE ENGINE (PYTHON)
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.env

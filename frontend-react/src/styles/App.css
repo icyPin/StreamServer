@@ -1,0 +1,59 @@
+:root {
+  --bg-primary: #141414;
+  --bg-secondary: #181818;
+  --accent-red: #E50914;
+  --accent-cyan: #00ffff;
+  --text-primary: #ffffff;
+  --text-muted: #808080;
+  --border-subtle: #282828;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-frame {
+  flex: 1;
+  padding: 90px 4% 40px 4%; /* Avoid navbar overlay */
+}
+
+.cinema-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.nav-back-button {
+  background: none;
+  border: 1px solid var(--text-muted);
+  color: var(--text-primary);
+  padding: 8px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 24px;
+  align-self: flex-start;
+  transition: all 0.2s ease;
+}
+
+.nav-back-button:hover {
+  background-color: var(--text-primary);
+  color: #000000;
+}
+
+.native-player {
+  width: 90%;
+  max-width: 1100px;
+  aspect-ratio: 16/9;
+  border-radius: 8px;
+  background-color: #000000;
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.15);
+}
