@@ -53,11 +53,11 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #ff3333; /* Red default disconnected */
+  background-color: #ff3333; 
 }
 
 .status-node.connected {
-  background-color: #33ff33; /* Green when running script */
+  background-color: #33ff33;
   box-shadow: 0 0 8px #33ff33;
 }
 

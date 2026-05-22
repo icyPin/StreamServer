@@ -2,7 +2,7 @@ import React from 'react';
 import '../styles/Navbar.css';
 
 function Navbar({ onLogoClick, onFolderIconClick, currentFolder, gestureStatus }) {
-  // Extract the folder name from absolute path for scannable UI readout
+  
   const folderDisplay = currentFolder.substring(currentFolder.lastIndexOf('/') + 1) || "Root";
 
   return (

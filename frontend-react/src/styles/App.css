@@ -22,7 +22,7 @@ body {
 
 .content-frame {
   flex: 1;
-  padding: 90px 4% 40px 4%; /* Avoid navbar overlay */
+  padding: 90px 4% 40px 4%; 
 }
 
 .cinema-wrapper {

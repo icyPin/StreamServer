@@ -2,7 +2,7 @@ import React from 'react';
 
 function ShowCard({ show, onClick }) {
   const totalEpisodes = show.episodes ? show.episodes.length : 0;
-  // Fallback icon token derived from first char
+
   const fallbackToken = show.showName ? show.showName.charAt(0).toUpperCase() : '?';
 
   return (

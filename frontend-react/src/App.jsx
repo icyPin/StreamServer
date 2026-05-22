@@ -6,20 +6,19 @@ import FolderModal from './components/FolderModal';
 import './styles/App.css';
 
 function App() {
-  // Library & Navigation States
+
   const [library, setLibrary] = useState([]);
   const [currentFolder, setCurrentFolder] = useState("/home/icy/Downloads/Animes");
   const [selectedShow, setSelectedShow] = useState(null);
   const [currentVideoUrl, setCurrentVideoUrl] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // FUTURE GESTURE ENGINE STATES (Month 2 Prep)
+  // FUTURE GESTURE ENGINE STATES 
   const [gestureStatus, setGestureStatus] = useState("Disconnected");
   const [lastActiveGesture, setLastActiveGesture] = useState("None");
   const videoRef = useRef(null);
-  const socketRef = useRef(null); // Reserved for Python WebSocket connection
+  const socketRef = useRef(null); 
 
-  // Fetch media library data from Spring Boot backend
   const fetchLibrary = async (folderPath) => {
     try {
       const response = await fetch(
@@ -33,14 +32,12 @@ function App() {
     }
   };
 
-  // Automatically refresh library when folder changes
   useEffect(() => {
     if (currentFolder) {
       fetchLibrary(currentFolder);
     }
   }, [currentFolder]);
 
-  // Handle returning to main view
   const handleResetNavigation = () => {
     setSelectedShow(null);
     setCurrentVideoUrl("");
@@ -56,7 +53,6 @@ function App() {
       />
 
       <main className="content-frame">
-        {/* Render views dynamically based on user navigation */}
         {currentVideoUrl ? (
           <div className="cinema-wrapper">
             <button className="nav-back-button" onClick={() => setCurrentVideoUrl("")}>
@@ -78,8 +74,6 @@ function App() {
           />
         )}
       </main>
-
-      {/* Dynamic Directory Configuration Overlay */}
       {isModalOpen && (
         <FolderModal 
           onClose={() => setIsModalOpen(false)}

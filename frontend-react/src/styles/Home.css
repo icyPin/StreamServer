@@ -34,7 +34,6 @@
   gap: 24px;
 }
 
-/* Fallback state decoration layout */
 .empty-catalog-fallback {
   display: flex;
   flex-direction: column;

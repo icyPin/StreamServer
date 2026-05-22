@@ -37,7 +37,7 @@ function ShowDetails({ show, onBackClick, onEpisodeSelect }) {
         ) : (
           <div className="manifest-table-rows">
             {episodesList.map((episode, index) => {
-              // Clean up .mp4 file extension text for a clean retail interface string
+             
               const cleanTitle = episode.title ? episode.title.replace(".mp4", "") : `Volume ${index + 1}`;
               
               return (
