@@ -1,33 +1,23 @@
-# ==========================================
-# ROOT LEVEL IGNORES (Monorepo Master)
-# ==========================================
 
-# 1. Custom Media Folders (CRITICAL to prevent Git crashes)
 videos/
 /Downloads/
 *.mp4
 *.mkv
 *.ts
 
-# 2. IntelliJ IDEA / WebStorm / PyCharm
 .idea/
 *.iws
 *.iml
 *.ipr
 out/
 
-# 3. VS Code
 .vscode/
 
-# 4. Operating System Junk
 .DS_Store
 Thumbs.db
 ehthumbs.db
 Desktop.ini
 
-# ==========================================
-# PREP FOR MONTH 2: GESTURE ENGINE (PYTHON)
-# ==========================================
 __pycache__/
 *.py[cod]
 *$py.class
