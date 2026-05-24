@@ -29,7 +29,7 @@ public class VideoStreamingController {
 
     @GetMapping(value = "/stream" , produces = "video/mp4")
     public ResponseEntity<ResourceRegion> Stream(@RequestHeader HttpHeaders headers ,
-                                                 @RequestParam String filePath){
+                                                 @RequestParam("filePath") String filePath){
 
         try{
             ResourceRegion region = videoService.getPartialVideoRegion(headers , filePath);

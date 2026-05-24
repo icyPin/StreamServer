@@ -24,7 +24,7 @@ public class LibraryController {
     }
 
     @GetMapping("/scan")
-    public ResponseEntity<List<Show>> scanLibrary(@RequestParam(required = true)String rootPath){
+    public ResponseEntity<List<Show>> scanLibrary(@RequestParam(value = "rootPath" , required = true)String rootPath){
         try{
             List<Show> shows;
             shows = readingService.ScanLibrary(rootPath);

@@ -55,7 +55,7 @@ public class FolderReadingService {
 
             for(Path file : mp4Files){
                 String title = file.getFileName().toString();
-                String videoUrl = "http://localhost:8086/api/v1/video/stream?filePath="+ file.toAbsolutePath().toString();
+                String videoUrl = "http://192.168.31.56:8086/api/v1/video/stream?filePath="+ file.toAbsolutePath().toString();
                 episodes.add(new Episode(title , videoUrl));
             }
         } catch (IOException e) {
