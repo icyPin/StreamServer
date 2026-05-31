@@ -17,8 +17,10 @@ public class WebSocketConfig implements WebSocketConfigurer {
         this.webSocketHandler=webSocketHandler;
     }
 
+    @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry){
-
+        registry.addHandler(webSocketHandler , "/gestures")
+                .setAllowedOrigins("*");
     }
 
 }
