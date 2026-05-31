@@ -17,7 +17,7 @@ public class NetworkingService {
     @PostConstruct
     public void registerService(){
         try{
-            jmDNS = JmDNS.create(InetAddress.getLocalHost());
+            jmDNS = JmDNS.create(InetAddress.getByName("192.168.31.56"));
             ServiceInfo serviceInfo = ServiceInfo.create(
                     "_http._tcp.local.",
                     "netflix-gesture",
