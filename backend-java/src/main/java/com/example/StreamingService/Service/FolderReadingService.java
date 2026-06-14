@@ -16,24 +16,26 @@ import java.util.stream.Stream;
 @Service
 public class FolderReadingService {
 
+    private final String basePath = "/media/";
 
-    public List<Show> ScanLibrary(String rootPath) throws IOException{
+    public List<Show> ScanLibrary(String userFolderName) throws IOException{
 
         List<Show> shows = new ArrayList<>();
-        Path root = Paths.get(rootPath);
+        Path root = Paths.get(basePath, userFolderName);
 
         if(Files.notExists(root)){
-            System.out.println("Create a package named MediaLibrary and store all shows inside it in organised manner pls !!!");
+            System.out.println("Create a package: "+userFolderName+" and store all shows inside it in organised manner pls !!!");
             return shows;
         }
         try(Stream<Path> showFolder = Files.list(root)){
             List<Path> directories = showFolder
                     .filter(Files::isDirectory)
+                    .filter(p -> !p.getFileName().toString().startsWith("."))
                     .toList();
 
             for(Path show : directories){
                 String showName = show.getFileName().toString();
-                List<Episode> episodes = getEpisodesOf(show , showName , rootPath);
+                List<Episode> episodes = getEpisodesOf(show , showName);
                 shows.add(new Show(showName , episodes , null));
 
             }
@@ -44,7 +46,7 @@ public class FolderReadingService {
         return shows;
    }
 
-   private List<Episode> getEpisodesOf(Path showFolder , String showName , String rootPath){
+   private List<Episode> getEpisodesOf(Path showFolder , String showName ){
 
         List<Episode> episodes = new ArrayList<>();
         try(Stream<Path> files = Files.list(showFolder)){
@@ -55,10 +57,14 @@ public class FolderReadingService {
 
             for(Path file : mp4Files){
                 String title = file.getFileName().toString();
+                String filePath = file.toAbsolutePath().toString();
+
+                //for testing only
                 String videoUrl = "http://192.168.31.56:8086/api/v1/video/stream?filePath="+ file
                         .toAbsolutePath()
                         .toString();
-                episodes.add(new Episode(title , videoUrl));
+
+                episodes.add(new Episode(title , filePath));
             }
         } catch (IOException e) {
             System.out.println("failed to read episodes of "+ showName);

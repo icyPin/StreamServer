@@ -25,6 +25,7 @@ function ShowDetails({ show, onBackClick, onEpisodeSelect }) {
       </div>
 
       {/* Dynamic Episode Grid/List */}
+
       <section className="episode-manifest-container">
         <div className="manifest-header-row">
           <h3>Episodes</h3>

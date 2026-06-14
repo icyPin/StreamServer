@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class Episode {
 
     private String title;
-    private String videoUrl;
+    private String filePath;
 
 }

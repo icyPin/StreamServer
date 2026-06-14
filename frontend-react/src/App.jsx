@@ -6,7 +6,6 @@ import FolderModal from './components/FolderModal';
 import './styles/App.css';
 
 function App() {
-
   const [library, setLibrary] = useState([]);
   const [currentFolder, setCurrentFolder] = useState("/home/icy/Downloads/Animes");
   const [selectedShow, setSelectedShow] = useState(null);
@@ -18,16 +17,18 @@ function App() {
   const [lastActiveGesture, setLastActiveGesture] = useState("None");
   const videoRef = useRef(null);
   const socketRef = useRef(null); 
+  
 
   const fetchLibrary = async (folderPath) => {
     try {
       const response = await fetch(
-        `http://localhost:8086/api/v1/library/scan?rootPath=${encodeURIComponent(folderPath)}`
+        `http://192.168.31.56:8086/api/v1/library/scan?rootPath=${encodeURIComponent(folderPath)}`
       );
       if (!response.ok) throw new Error("Server error scanning directory");
       const data = await response.json();
       setLibrary(data);
     } catch (err) {
+      alert("Failed to sync media library. Check console for details."+ err.message);
       console.error("Failed to sync local media library:", err);
     }
   };
@@ -58,7 +59,17 @@ function App() {
             <button className="nav-back-button" onClick={() => setCurrentVideoUrl("")}>
               ← Back to Episodes
             </button>
-            <video ref={videoRef} src={currentVideoUrl} controls className="native-player" autoPlay />
+          <video 
+    ref={videoRef} 
+    key={currentVideoUrl} 
+    src={currentVideoUrl} /* Moved the URL here directly */
+    controls 
+    playsInline 
+    className="native-player"
+    style={{ width: "100%", height: "auto" }}
+>
+    Your browser does not support the video tag.
+         </video>
           </div>
         ) : selectedShow ? (
           <ShowDetails 
