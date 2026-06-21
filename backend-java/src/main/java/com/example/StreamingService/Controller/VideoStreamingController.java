@@ -42,14 +42,17 @@ public class VideoStreamingController {
         }
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> handleUpload(@RequestParam("file")  MultipartFile file){
+    @GetMapping("/hls")
+    public ResponseEntity<Void> hlsStreaming(@RequestParam("filePath")  String filePath){
 
         try{
-            videoService.processAndTranscodeVideo(file);
-            return ResponseEntity.ok("Transcoding complete");
+            String folderName = videoService.processAndTranscodeVideo(filePath);
+            String playlistUrl = "/transcoding/" + folderName + "/playlist.m3u8";
+            return ResponseEntity.status(HttpStatus.FOUND).
+                    header(HttpHeaders.LOCATION , playlistUrl)
+                    .build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Problem is video transcoding try again after some time");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

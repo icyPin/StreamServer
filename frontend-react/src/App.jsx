@@ -1,35 +1,36 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import ShowDetails from './pages/ShowDetails';
 import FolderModal from './components/FolderModal';
+import SmartVideoPlayer from './components/SmartVideoPlayer'; // Import the new player
 import './styles/App.css';
 
 function App() {
   const [library, setLibrary] = useState([]);
-  const [currentFolder, setCurrentFolder] = useState("/home/icy/Downloads/Animes");
+  
+  // Set default to just "Animes" to match the Docker setup from your Postman screenshot
+  const [currentFolder, setCurrentFolder] = useState("Animes"); 
   const [selectedShow, setSelectedShow] = useState(null);
   const [currentVideoUrl, setCurrentVideoUrl] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // FUTURE GESTURE ENGINE STATES 
   const [gestureStatus, setGestureStatus] = useState("Disconnected");
-  const [lastActiveGesture, setLastActiveGesture] = useState("None");
-  const videoRef = useRef(null);
-  const socketRef = useRef(null); 
-  
 
-  const fetchLibrary = async (folderPath) => {
+  const laptopIp = window.location.hostname;
+
+  const fetchLibrary = async (folder) => {
     try {
       const response = await fetch(
-        `http://192.168.31.56:8086/api/v1/library/scan?rootPath=${encodeURIComponent(folderPath)}`
+        `http://${laptopIp}:8086/api/v1/library/scan?rootPath=${encodeURIComponent(folder)}`
       );
       if (!response.ok) throw new Error("Server error scanning directory");
       const data = await response.json();
       setLibrary(data);
     } catch (err) {
-      alert("Failed to sync media library. Check console for details."+ err.message);
-      console.error("Failed to sync local media library:", err);
+      alert("Failed to sync media library. Check console for details: " + err.message);
+      console.error(err);
     }
   };
 
@@ -55,27 +56,18 @@ function App() {
 
       <main className="content-frame">
         {currentVideoUrl ? (
-          <div className="cinema-wrapper">
-            <button className="nav-back-button" onClick={() => setCurrentVideoUrl("")}>
-              ← Back to Episodes
-            </button>
-          <video 
-    ref={videoRef} 
-    key={currentVideoUrl} 
-    src={currentVideoUrl} /* Moved the URL here directly */
-    controls 
-    playsInline 
-    className="native-player"
-    style={{ width: "100%", height: "auto" }}
->
-    Your browser does not support the video tag.
-         </video>
-          </div>
+          
+          /* THE NEW PLAYER COMPONENT REPLACES THE OLD RAW VIDEO TAG */
+          <SmartVideoPlayer 
+            filePath={currentVideoUrl} 
+            onBack={() => setCurrentVideoUrl("")} 
+          />
+
         ) : selectedShow ? (
           <ShowDetails 
             show={selectedShow} 
             onBackClick={() => setSelectedShow(null)}
-            onEpisodeSelect={setCurrentVideoUrl}
+            onEpisodeSelect={setCurrentVideoUrl} // Passes the raw path to the player!
           />
         ) : (
           <Home 
@@ -85,6 +77,7 @@ function App() {
           />
         )}
       </main>
+
       {isModalOpen && (
         <FolderModal 
           onClose={() => setIsModalOpen(false)}

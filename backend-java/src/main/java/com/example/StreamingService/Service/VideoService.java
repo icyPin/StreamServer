@@ -23,7 +23,7 @@ import java.nio.file.StandardCopyOption;
 public class VideoService {
 
 
-    private final Path storageLocation = Paths.get("videos");
+    private final Path storageLocation = Paths.get("/media/.transcodes");
 
     public ResourceRegion getPartialVideoRegion(HttpHeaders headers , String filePath) throws IOException {
         Resource video = new FileSystemResource(filePath);
@@ -44,36 +44,40 @@ public class VideoService {
         }
     }
 
-    public void processAndTranscodeVideo(MultipartFile file){
+    public String processAndTranscodeVideo(String filePath) throws Exception{
 
-        try{
-            if(Files.notExists(storageLocation)){
-                Files.createDirectories(storageLocation);
-            }
+        Path sourcePath = Paths.get(filePath);
 
-            Path inputFile = storageLocation.resolve(file.getOriginalFilename());
-            Files.copy(file.getInputStream(), inputFile , StandardCopyOption.REPLACE_EXISTING);
-            String folderName = file.getOriginalFilename().replace(".mp4","");
-            Path hlsoutputDir = storageLocation.resolve(folderName);
-            Files.createDirectories(hlsoutputDir);
+        String folderName = sourcePath.getFileName().toString().replace("mp4" , "");
+        Path hlsOutputDir = storageLocation.resolve(folderName);
+        Path playlistPath = hlsOutputDir.resolve("playlist.m3u8");
 
-            String ffmpeg = String.format("ffmpeg -i %s -codec:v libx264 -codec:a aac -hls_time 10" +
-                            " -hls_playlist_type vod -hls_segment_filename %s/chunk_%%03d.ts %s/playlist.m3u8",
-                    inputFile.toAbsolutePath(),
-                    hlsoutputDir.toAbsolutePath(),
-                    hlsoutputDir.toAbsolutePath()
-            );
-            System.out.println("Starting ffmpeg conversion");
+        if(Files.exists(playlistPath))
+            return folderName;
 
-            ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", ffmpeg);
-            processBuilder.inheritIO();
-            Process process = processBuilder.start();
-            process.waitFor();
 
-            System.out.println("ffmpeg processing completed");
-    }catch (Exception e) {
-            e.printStackTrace();
+        Files.createDirectories(hlsOutputDir);
+        String ffmpeg = String.format("ffmpeg -i \"%s\" -codec copy -start_number 0 -hls_time 10 -hls_list_size 0 -hls_playlist_type vod -f hls \"%s\"",
+                sourcePath.toAbsolutePath(),
+                playlistPath.toAbsolutePath()
+        );
+
+        ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", ffmpeg);
+        processBuilder.inheritIO();
+        Process process = processBuilder.start();
+        System.out.println("ffmpeg processing started");
+
+        int attempt=0;
+
+        while(!Files.exists(playlistPath) && attempt<50){
+            Thread.sleep(200);
+            attempt++;
         }
+
+        if(Files.notExists(playlistPath))
+            throw new RuntimeException("ffmpeg failed to start in time");
+
+        return folderName;
     }
 }
 

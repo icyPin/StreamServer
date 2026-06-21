@@ -1,0 +1,10 @@
+services:
+  backend:
+    build: ./backend-java
+    image: fishy001/anime-backend:latest
+    container_name: anime-backend
+    ports:
+      - "8086:8086"
+    volumes:
+      - /home/icy/Downloads:/media
+    restart: unless-stopped

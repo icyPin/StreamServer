@@ -45,7 +45,7 @@ function ShowDetails({ show, onBackClick, onEpisodeSelect }) {
                 <div 
                   key={episode.title || index} 
                   className="episode-interactive-row"
-                  onClick={() => onEpisodeSelect(episode.videoUrl)}
+                  onClick={() => onEpisodeSelect(episode.filePath)}
                 >
                   <div className="row-left-index">
                     <span className="track-number">{index + 1}</span>
