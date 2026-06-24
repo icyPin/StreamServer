@@ -17,8 +17,13 @@ import java.util.stream.Stream;
 public class FolderReadingService {
 
     private final String basePath = "/media/";
+    ThumbnailGenerator thumbnailGenerator;
 
-    public List<Show> ScanLibrary(String userFolderName) throws IOException{
+    public FolderReadingService(ThumbnailGenerator thumbnailGenerator){
+        this.thumbnailGenerator=thumbnailGenerator;
+    }
+
+    public List<Show> ScanLibrary(String userFolderName) throws Exception{
 
         List<Show> shows = new ArrayList<>();
         Path root = Paths.get(basePath, userFolderName);
@@ -36,7 +41,9 @@ public class FolderReadingService {
             for(Path show : directories){
                 String showName = show.getFileName().toString();
                 List<Episode> episodes = getEpisodesOf(show , showName);
-                shows.add(new Show(showName , episodes , null));
+                String thumbnailUrl = thumbnailGenerator.getThumbnail(episodes , showName);
+                System.out.println(thumbnailUrl);
+                shows.add(new Show(showName , episodes , thumbnailUrl));
 
             }
         }catch (IOException e){

@@ -1,67 +1,69 @@
 import React from 'react';
-import '../styles/ShowDetails.css';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ArrowLeft, Play, Film } from 'lucide-react';
 
-function ShowDetails({ show, onBackClick, onEpisodeSelect }) {
-  const episodesList = show.episodes || [];
+export default function ShowDetails() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  const ip = window.location.hostname;
+  const show = location.state?.showData;
+
+  if (!show) {
+    return (
+      <div style={{ textAlign: 'center', marginTop: '5rem' }}>
+        <h2>Show not found</h2>
+        <button className="back-btn" onClick={() => navigate('/')}>Return to Library</button>
+      </div>
+    );
+  }
+
+  const handleEpisodeClick = (episode) => {
+    navigate('/play', { 
+      state: { 
+        filePath: episode.filePath,
+        title: episode.title,
+        showName: show.showName
+      } 
+    });
+  };
 
   return (
-    <div className="show-details-view">
-      {/* Navigation Header */}
-      <div className="details-header-nav">
-        <button className="back-navigation-anchor" onClick={onBackClick}>
-          <span className="arrow-vector">←</span> Back to Collections
-        </button>
-      </div>
+    <div className="show-details-container">
+      <button className="back-btn" onClick={() => navigate(-1)}>
+        <ArrowLeft size={20} /> Back to Library
+      </button>
 
-      {/* Show Spotlight Banner */}
-      <div className="show-spotlight-hero">
-        <div className="hero-banner-art">
-          <span>{show.showName ? show.showName.charAt(0).toUpperCase() : '?'}</span>
-        </div>
-        <div className="hero-spotlight-meta">
-          <h2 className="spotlight-title">{show.showName}</h2>
-          <p className="spotlight-stats-badge">{episodesList.length} Available Volumes</p>
-        </div>
-      </div>
-
-      {/* Dynamic Episode Grid/List */}
-
-      <section className="episode-manifest-container">
-        <div className="manifest-header-row">
-          <h3>Episodes</h3>
-        </div>
-
-        {episodesList.length === 0 ? (
-          <div className="empty-episodes-fallback">
-            <p>No playable media containers identified within this folder index.</p>
-          </div>
+      <div className="show-header">
+        {show.thumbnailUrl ? (
+          <img src={`http://${ip}:8086${show.thumbnailUrl}`} alt={show.showName} className="show-hero-image" />
         ) : (
-          <div className="manifest-table-rows">
-            {episodesList.map((episode, index) => {
-             
-              const cleanTitle = episode.title ? episode.title.replace(".mp4", "") : `Volume ${index + 1}`;
-              
-              return (
-                <div 
-                  key={episode.title || index} 
-                  className="episode-interactive-row"
-                  onClick={() => onEpisodeSelect(episode.filePath)}
-                >
-                  <div className="row-left-index">
-                    <span className="track-number">{index + 1}</span>
-                    <span className="inline-play-glyph">▶</span>
-                  </div>
-                  <div className="row-right-details">
-                    <span className="episode-media-title">{cleanTitle}</span>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="show-hero-image" style={{ backgroundColor: 'var(--bg-hover)', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '300px' }}>
+            <Film size={64} color="var(--text-muted)" />
           </div>
         )}
-      </section>
+        <div>
+          <h1 className="show-title-large">{show.showName}</h1>
+          <p style={{ color: "var(--text-muted)", marginTop: "1rem" }}>
+            {show.episodes.length} Episodes
+          </p>
+        </div>
+      </div>
+
+      <h3 className="section-title">Episodes</h3>
+      <div className="episode-list">
+        {show.episodes.map((episode, index) => (
+          <div 
+            key={index} 
+            className="episode-row"
+            onClick={() => handleEpisodeClick(episode)}
+          >
+            <div className="episode-number">{index + 1}</div>
+            <Play size={18} color="var(--accent)" />
+            <div>{episode.title}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
-
-export default ShowDetails;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/FolderModal.css';
+// import '../styles/FolderModal.css';
 
 function FolderModal({ onClose, onSubmit, initialFolder }) {
   const [inputPath, setInputPath] = useState(initialFolder);
@@ -22,11 +22,11 @@ function FolderModal({ onClose, onSubmit, initialFolder }) {
         
         <form onSubmit={handleFormSubmit} className="modal-form-layout">
           <p className="modal-instruction-text">
-            Provide the absolute filesystem path to the directory containing your structured media folders.
+            Provide the folder name which contains your collection. Make sure its in the same directory u have mapped in the setup.U can change it anytime.
           </p>
           
           <div className="input-group-wrapper">
-            <label htmlFor="directory-path-input">Absolute Directory Path</label>
+            <label htmlFor="directory-path-input">NAME</label>
             <input 
               id="directory-path-input"
               type="text" 

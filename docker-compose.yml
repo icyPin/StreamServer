@@ -1,10 +1,20 @@
+version: '3.8'
+
 services:
   backend:
-    build: ./backend-java
-    image: fishy001/anime-backend:latest
-    container_name: anime-backend
+    image: fishy001/stream-backend:latest
+    container_name: stream-backend
     ports:
       - "8086:8086"
     volumes:
-      - /home/icy/Downloads:/media
+      - ${HOST_MEDIA_PATH}:/media
+    restart: unless-stopped
+
+  frontend:
+    image: fishy001/stream-frontend:latest
+    container_name: stream-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
     restart: unless-stopped

@@ -1,30 +1,69 @@
-import React from 'react';
-import '../styles/Navbar.css';
+// src/components/Navbar.jsx
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { FolderOpen, Search, Settings, X } from 'lucide-react';
 
-function Navbar({ onLogoClick, onFolderIconClick, currentFolder, gestureStatus }) {
-  
-  const folderDisplay = currentFolder.substring(currentFolder.lastIndexOf('/') + 1) || "Root";
+export default function Navbar({ currentFolder, onFolderClick }) {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    // This dynamically updates the URL as you type without reloading the page!
+    navigate(`/?search=${encodeURIComponent(query)}`);
+  };
 
   return (
-    <nav className="global-navbar">
-      <div className="nav-left-branding" onClick={onLogoClick}>
-        <span className="brand-logo-main">NETFLIX</span>
-        <span className="brand-logo-sub">_GESTURE</span>
-      </div>
+    <nav className="navbar">
+      <Link to="/" className="nav-brand">
+        STREAM<span style={{ color: "var(--text-main)" }}>SERVER</span>
+      </Link>
+      
+      <div className="nav-actions">
+        {/* Dynamic Search Bar Toggle */}
+        {isSearchOpen ? (
+          <div style={{ 
+            display: 'flex', alignItems: 'center', backgroundColor: 'var(--bg-surface)', 
+            borderRadius: 'var(--radius-md)', padding: '6px 12px' 
+          }}>
+            <Search size={16} color="var(--text-muted)" style={{ marginRight: '8px' }} />
+            <input
+              type="text"
+              autoFocus
+              placeholder="Search library..."
+              value={searchQuery}
+              onChange={handleSearch}
+              style={{ background: 'transparent', border: 'none', color: 'white', outline: 'none', width: '150px' }}
+            />
+            <button className="icon-btn" onClick={() => setIsSearchOpen(false)} style={{ padding: '2px', marginLeft: '4px' }}>
+              <X size={16} />
+            </button>
+          </div>
+        ) : (
+          <button className="icon-btn" title="Search" onClick={() => setIsSearchOpen(true)}>
+            <Search size={20} />
+          </button>
+        )}
 
-      <div className="nav-right-controls">
-        <div className="gesture-telemetry-badge">
-          <span className={`status-node ${gestureStatus.toLowerCase()}`}></span>
-          <span className="telemetry-label">Gesture System: {gestureStatus}</span>
-        </div>
+        {/* Dynamic Folder Button */}
+        <button 
+          className="icon-btn" 
+          title="Change Folder" 
+          onClick={onFolderClick}
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 12px', borderRadius: 'var(--radius-md)' }}
+        >
+          <FolderOpen size={18} color="var(--accent)" />
+          <span style={{ fontSize: '0.9rem', color: 'var(--text-main)', fontWeight: 500 }}>
+            {currentFolder}
+          </span>
+        </button>
 
-        <button className="directory-anchor-button" onClick={onFolderIconClick} title={currentFolder}>
-          <span className="folder-icon-graphic">📁</span>
-          <span className="directory-path-text">/{folderDisplay}</span>
+        <button className="icon-btn" title="Settings">
+          <Settings size={20} />
         </button>
       </div>
     </nav>
   );
 }
-
-export default Navbar;
