@@ -39,8 +39,8 @@ cd StreamServer
 Configure your media path:
 Create a .env file in the root directory and point it to the absolute path of the drive or folder containing your media (e.g., your Downloads folder).
 
-Code snippet
 # .env
+Code snippet
 HOST_MEDIA_PATH=/path/to/your/anime/folder
 
 ## Start the server:
