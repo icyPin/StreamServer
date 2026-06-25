@@ -33,7 +33,7 @@ If you are running native Windows or prefer to set up the environment manually, 
 Clone the repository:
 
 ```Bash
-git clone [https://github.com/icyPin/StreamServer.git](https://github.com/icyPin/StreamServer.git)
+git clone https://github.com/icyPin/StreamServer.git
 cd StreamServer
 ```
 Configure your media path:
