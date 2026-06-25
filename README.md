@@ -42,8 +42,9 @@ Create a .env file in the root directory and point it to the absolute path of th
 Code snippet
 # .env
 HOST_MEDIA_PATH=/path/to/your/anime/folder
-Start the server:
 
+## Start the server:
+Run this is the StreanServer folder
 ```Bash
 docker compose up -d
 ```
